@@ -1,4 +1,4 @@
-package config;
+package test.users.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,7 +9,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "java")
+@ComponentScan(basePackages = "test.users")
 public class WebConfig {
 
     @Bean
