@@ -21,15 +21,15 @@
         <input type="hidden" name="id" value="${user.id}">
     </c:if>
     <label for="name">Name</label>
-    <input type="text" name="title" id="name">
+    <input type="text" name="name" id="name">
     <label for="surname">Surname</label>
-    <input type="text" name="year" id="surname">
+    <input type="text" name="surname" id="surname">
     <label for="email">Email</label>
     <input type="text" name="email" id="email">
     <label for="age">Age</label>
     <input type="text" name="age" id="age">
     <c:if test="${empty user.name}">
-        <input type="submit" value="Add new film">
+        <input type="submit" value="Add new user">
     </c:if>
     <c:if test="${!empty user.name}">
         <input type="submit" value="Edit user">
