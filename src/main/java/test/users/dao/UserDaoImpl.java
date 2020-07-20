@@ -2,12 +2,11 @@ package test.users.dao;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import test.users.model.User;
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 @Repository
 public class UserDaoImpl implements UserDao{
@@ -20,11 +19,14 @@ public class UserDaoImpl implements UserDao{
     }
 
 
+    @PersistenceContext
+    private EntityManager entityManager;//gсделать всё с этим
+
     @Override
     @SuppressWarnings("Uncheked")
-    public List allUsers() {
+    public List<User> allUsers() {
         Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from User").list();
+        return session.createQuery("from User", User.class).list();
     }
 
     @Override
@@ -46,16 +48,16 @@ public class UserDaoImpl implements UserDao{
     }
 
     @Override
-    public User getById(int id) {
+    public User getUserById(int id) {
         Session session = sessionFactory.getCurrentSession();
         return session.get(User.class, id);
     }
 
     @Override
-    public User getByLogin(String login) {
-        return (User) sessionFactory.getCurrentSession()
-                .createQuery("FROM User where login=: login")
-                .setParameter("login", login)
-                .uniqueResult();
+    public User getUserByName(String name) {
+        User user = (User) entityManager.createQuery(" from User where name=:name")
+                .setParameter("name", name).getSingleResult();
+        return user;
+
     }
 }
