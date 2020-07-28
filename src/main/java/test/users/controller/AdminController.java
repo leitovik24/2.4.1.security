@@ -6,11 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import test.users.dao.RoleDao;
+import test.users.model.Role;
 import test.users.model.User;
 import test.users.service.UserService;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 
 @Controller
@@ -64,19 +66,15 @@ public class AdminController {
     }
 
     @PostMapping(value = "/edit")
-    public String editFilm(@RequestParam String id,
+    public String editUser(@RequestParam String id,
                            @RequestParam String name,
                            @RequestParam String password,
-                           @RequestParam String roles) {
-        User user = new User(Integer.parseInt(id), name, password);
-        if(roles.equalsIgnoreCase("admin")) {
-            user.setRoles(Collections.singleton(roleDao.getRoleById(1)));
-        }
-        else if(roles.equalsIgnoreCase("user")) {
-            user.setRoles(Collections.singleton(roleDao.getRoleById(2)));
-        }
+                           @RequestParam Set<Integer> roles){
+        User user = new User(Integer.parseInt(id),name, password);
+        user.setRoles(service.getRolesByName(roles));
         service.edit(user);
         return "redirect:/admin";
+
     }
 
      @RequestMapping(value="/delete/{id}", method = RequestMethod.GET)

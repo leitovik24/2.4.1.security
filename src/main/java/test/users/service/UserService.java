@@ -16,4 +16,5 @@ public interface UserService {  //чтобы засунуть в конфиг!!!
     void delete(User user);
     void edit(User user);
     User getUserById(int id);
+    public List<Role> getRolesByName(Set<Integer> ids);
 }

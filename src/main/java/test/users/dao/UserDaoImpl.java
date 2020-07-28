@@ -41,6 +41,5 @@ public class UserDaoImpl implements UserDao{
         User user = (User) entityManager.createQuery(" from User where name=:name")
                 .setParameter("name", name).getSingleResult();
         return user;
-
     }
 }

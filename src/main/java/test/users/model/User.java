@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,9 +27,9 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id")
     )
-    private Set<Role> roles;
+    private List<Role> roles;
 
-    public User(String name, String password, Set<Role> roles) {
+    public User(String name, String password, List<Role> roles) {
         this.name = name;
         this.password = password;
         this.roles = roles;
@@ -45,7 +46,7 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public User(int id, String name, String password, Set<Role> roles) {
+    public User(int id, String name, String password, List<Role> roles) {
         this.id = id;
         this.name = name;
         this.password = password;
@@ -107,11 +108,11 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 

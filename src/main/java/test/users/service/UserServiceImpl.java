@@ -35,13 +35,13 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void addAdmin(User user) {
-        user.setRoles(Collections.singleton(roleDao.getRoleById(1)));
+        user.setRoles((List)Collections.singleton(roleDao.getRoleById(1)));
         userDao.add(user);
     }
     @Override
     @Transactional
     public void add(User user) {
-        user.setRoles(Collections.singleton(roleDao.getRoleById(2)));
+        user.setRoles((List)Collections.singleton(roleDao.getRoleById(2)));
         userDao.add(user);
     }
 
@@ -63,5 +63,10 @@ public class UserServiceImpl implements UserService{
         return userDao.getUserById(id);
     }
 
+    @Override
+    @Transactional
+    public List<Role> getRolesByName(Set<Integer> ids) {
+        return roleDao.getRolesByName(ids);
+    }
 
 }
