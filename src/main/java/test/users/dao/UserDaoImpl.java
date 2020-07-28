@@ -1,8 +1,5 @@
 package test.users.dao;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import test.users.model.User;
 import javax.persistence.EntityManager;
@@ -11,46 +8,32 @@ import java.util.List;
 @Repository
 public class UserDaoImpl implements UserDao{
 
-    private SessionFactory sessionFactory;
-
-    @Autowired
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-
     @PersistenceContext
-    private EntityManager entityManager;//gсделать всё с этим
+    private EntityManager entityManager;
 
     @Override
-    @SuppressWarnings("Uncheked")
     public List<User> allUsers() {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from User", User.class).list();
+        return entityManager.createQuery("from User").getResultList();
     }
 
     @Override
     public void add(User user) {
-        Session session = sessionFactory.getCurrentSession();
-        session.persist(user);
+        entityManager.persist(user);
     }
 
     @Override
     public void delete(User user) {
-        Session session = sessionFactory.getCurrentSession();
-        session.delete(user);
+        entityManager.remove(user);
     }
 
     @Override
     public void edit(User user) {
-        Session session = sessionFactory.getCurrentSession();
-        session.update(user);
+        entityManager.merge(user);
     }
 
     @Override
     public User getUserById(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.get(User.class, id);
+        return (User)entityManager.find(User.class, id);
     }
 
     @Override

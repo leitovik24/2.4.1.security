@@ -2,6 +2,7 @@ package test.users.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,14 @@ public class LoginController {
 
 
     @GetMapping("login")
-    public String loginGet(ModelMap map) {
+    public String loginGet(Model model, String error, String logout) {
+        if(error != null) {
+            model.addAttribute("error", "Username or password gavno");
+        }
+        if(logout != null){
+            model.addAttribute("message", "Logged out ok");
+        }
+
         return "login";
     }
 

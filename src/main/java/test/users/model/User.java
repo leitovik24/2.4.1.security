@@ -13,8 +13,6 @@ public class User implements UserDetails {
     public User() {
     }
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -23,12 +21,18 @@ public class User implements UserDetails {
     private String name;//shift f6
 
     private String password;
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)//wtt cascade
+    @ManyToMany(fetch = FetchType.EAGER)//wtt cascade
     @JoinTable(name = "users_role",
             joinColumns = @JoinColumn(name = "userId", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "id")
     )
     private Set<Role> roles;
+
+    public User(String name, String password, Set<Role> roles) {
+        this.name = name;
+        this.password = password;
+        this.roles = roles;
+    }
 
     public User(String name, String password) {
         this.name = name;
@@ -78,6 +82,7 @@ public class User implements UserDetails {
         return name;
     }
 
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -109,9 +114,14 @@ public class User implements UserDetails {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
     @Override
     public String toString() {
-        return name + " your name is  - " + name +
-                " AND YOUR PASSWORD IS - " + password  ;
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }

@@ -5,11 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import test.users.dao.RoleDao;
 import test.users.model.User;
 import test.users.service.UserService;
-import test.users.service.UserServiceImpl;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -17,52 +17,72 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
+    private final RoleDao roleDao;
     private final UserService service;
     @Autowired
-    public AdminController(UserService service) {
+    public AdminController(RoleDao roleDao, UserService service) {
+        this.roleDao = roleDao;
         this.service = service;
     }
 
     @GetMapping
-    public String adminPage() {
+    public String adminPage(ModelMap model) {
+        List<User> users = service.allUsers();
+        model.addAttribute("users", users);
         return "admin";
     }
 
-    @GetMapping(value = "/admin/users")
-    public String printAllUsers(ModelMap model) {
-        List<User> list = service.allUsers();
-        model.addAttribute("allUsers", list);
-        return "admin";
+    @GetMapping(value = "/addAdmin")
+    public String addAdmin(Model model) {
+        model.addAttribute("addUser");
+        return "addAdmin";
     }
 
-    @GetMapping(value = "/admin/add")
+    @PostMapping(value = "/addAdmin")
+    public String addAdmin(@ModelAttribute("user") User user) {
+        service.addAdmin(user);
+        return "redirect:/admin";
+    }
+
+    @GetMapping(value = "/add")
     public String addUserPage(Model model) {
         model.addAttribute("addUser");
-        return "edit";
+        return "add";
     }
 
-    @PostMapping(value = "/admin/add")
+    @PostMapping(value = "/add")
     public String addUser(@ModelAttribute("user") User user) {
         service.add(user);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 
-    @GetMapping(value = "/admin/edit/{id}")
-    public String editUserPage(@PathVariable("id") int id, Model model) {
+    @GetMapping(value = "/edit/{id}")
+    public String editUserPage(@PathVariable("id") int id,
+                               Model model) {
         model.addAttribute("user", service.getUserById(id));
         return "edit";
     }
 
-    @PostMapping(value = "/admin/edit")
-    public String editFilm(@ModelAttribute("user") User user) {
+    @PostMapping(value = "/edit")
+    public String editFilm(@RequestParam String id,
+                           @RequestParam String name,
+                           @RequestParam String password,
+                           @RequestParam String roles) {
+        User user = new User(Integer.parseInt(id), name, password);
+        if(roles.equalsIgnoreCase("admin")) {
+            user.setRoles(Collections.singleton(roleDao.getRoleById(1)));
+        }
+        else if(roles.equalsIgnoreCase("user")) {
+            user.setRoles(Collections.singleton(roleDao.getRoleById(2)));
+        }
         service.edit(user);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 
-    @RequestMapping(value = "/admin/delete/{id}", method = RequestMethod.GET)
-    public String deleteUserPage(@PathVariable("id") int id) {
+     @RequestMapping(value="/delete/{id}", method = RequestMethod.GET)
+     public String deleteUser(@PathVariable("id") int id) {
         User user = service.getUserById(id);
         service.delete(user);
-        return "redirect:/admin/users";
+        return "redirect:/admin";
     }
 }
