@@ -7,11 +7,16 @@ import org.springframework.stereotype.Repository;
 import test.users.model.Role;
 import test.users.model.User;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Set;
 
 @Repository
 public class RoleDaoImpl implements RoleDao {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private SessionFactory sessionFactory;
 
@@ -35,6 +40,11 @@ public class RoleDaoImpl implements RoleDao {
                 .createQuery("from Role role where role.id in (:ids)")
                 .setParameter("ids", ids).getResultList();
 
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return entityManager.createQuery("from Role").getResultList();
     }
 
 }

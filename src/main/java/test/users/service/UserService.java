@@ -11,7 +11,6 @@ import java.util.Set;
 
 public interface UserService {  //чтобы засунуть в конфиг!!!!!!!!!
     List<User> allUsers();
-    void addAdmin(User user);
     void add(User user);
     void delete(User user);
     void edit(User user);

@@ -32,16 +32,10 @@ public class UserServiceImpl implements UserService{
         return userDao.allUsers();
     }
 
-    @Override
-    @Transactional
-    public void addAdmin(User user) {
-        user.setRoles((List)Collections.singleton(roleDao.getRoleById(1)));
-        userDao.add(user);
-    }
+
     @Override
     @Transactional
     public void add(User user) {
-        user.setRoles((List)Collections.singleton(roleDao.getRoleById(2)));
         userDao.add(user);
     }
 

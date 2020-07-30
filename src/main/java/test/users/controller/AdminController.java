@@ -9,8 +9,6 @@ import test.users.dao.RoleDao;
 import test.users.model.Role;
 import test.users.model.User;
 import test.users.service.UserService;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -34,26 +32,21 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping(value = "/addAdmin")
-    public String addAdmin(Model model) {
-        model.addAttribute("addUser");
-        return "addAdmin";
-    }
-
-    @PostMapping(value = "/addAdmin")
-    public String addAdmin(@ModelAttribute("user") User user) {
-        service.addAdmin(user);
-        return "redirect:/admin";
-    }
 
     @GetMapping(value = "/add")
     public String addUserPage(Model model) {
+        List<Role> roles1 = roleDao.getAllRoles();
+        model.addAttribute("roles", roles1);
         model.addAttribute("addUser");
         return "add";
     }
 
     @PostMapping(value = "/add")
-    public String addUser(@ModelAttribute("user") User user) {
+    public String addUser(@RequestParam String name,
+                          @RequestParam String password,
+                          @RequestParam Set<Integer> roles) {
+        User user = new User(name, password);
+        user.setRoles(service.getRolesByName(roles));
         service.add(user);
         return "redirect:/admin";
     }
@@ -61,6 +54,8 @@ public class AdminController {
     @GetMapping(value = "/edit/{id}")
     public String editUserPage(@PathVariable("id") int id,
                                Model model) {
+        List<Role> roles1 = roleDao.getAllRoles();
+        model.addAttribute("roles", roles1);
         model.addAttribute("user", service.getUserById(id));
         return "edit";
     }

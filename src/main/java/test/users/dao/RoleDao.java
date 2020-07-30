@@ -8,5 +8,6 @@ import java.util.Set;
 
 public interface RoleDao {
     Role getRoleById(int id);
-    public List<Role> getRolesByName(Set<Integer> ids);
+    List<Role> getRolesByName(Set<Integer> ids);
+    List<Role> getAllRoles();
 }
